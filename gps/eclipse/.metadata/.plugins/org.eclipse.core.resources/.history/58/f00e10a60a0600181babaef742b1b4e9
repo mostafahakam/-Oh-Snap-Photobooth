@@ -1,0 +1,202 @@
+#include <stdio.h>
+#include <system.h>
+#include <string.h>
+#include <sys/alt_alarm.h>
+#include <unistd.h>
+#include <sys/alt_timestamp.h>
+#include <string.h>
+#define UART (volatile char *) 0x0002000
+#define HEX (volatile char *) 0x00011040
+#define LEDs (volatile char *) 0x00011060
+#define SWITCHES (volatile char *) 0x0011050
+#define PUSHBUTTON (volatile char *) 0x0011070
+
+
+int main() {
+	printf("Hello!\n");
+	int hi = erase_log();
+	while(1) {
+		int check = *SWITCHES;
+		if(check % 2 == 0) {
+			if(*PUSHBUTTON) {
+				printf("\n\nRefreshing values\n\n");
+				int fix = get_gps();
+				if(fix)
+					printf("We have signal!\n");
+				else
+					printf("We don't have signal.\n");
+			} else
+				continue;
+		} else {
+			printf("this is where logging function will go.\n");
+		}
+	}
+	return 0;
+}
+
+
+int get_gps() {
+	const char * ID = "$GPGGA";
+	FILE* fp;
+	char incoming;
+	int have_link = 0;
+	char message[128];
+	volatile char message_id[7];
+	volatile char utc_time[11];
+	volatile char ns_ind[2];
+	volatile char ew_ind[2];
+	volatile char latitude[10];
+	volatile char longitude[11];
+	volatile char gps_fix[2];
+	volatile char no_sat[3];
+	volatile int i = 0;
+	volatile int j = 0;
+	int check_type = 1;
+	int hash;
+	fp = fopen("/dev/uart_0", "r+");
+	if(fp == NULL)
+		printf("RS232 error. \n");
+	else {
+		while(check_type){
+			while(incoming != '$') {
+				incoming = getc(fp);
+			}
+			i=0;
+			while(incoming != '\r') {
+				*(message+i) = incoming;
+				incoming = getc(fp);
+				i++;
+			}
+			hash = strncmp(message, ID, 6);
+//			printf("check = '%d'\n", hash);
+/*			for(i=0; i<72; i++) {
+				printf("%c", *(message+i));
+			}
+			printf("\n"); */
+			if(hash == 0) {
+				check_type = 0;
+			}
+		}
+		i=0;
+		j=0;
+		while(message[j] != ',') {
+			*(message_id+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(message_id+i) = '\0';
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(utc_time+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(utc_time+i) = '\0';
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(latitude+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(latitude+i) = '\0';
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(ns_ind+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(ns_ind+i) = '\0';
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(longitude+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(longitude+i) = '\0';
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(ew_ind+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(ew_ind+i) = '\0';
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(gps_fix+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(gps_fix+i) = '\0';
+		if(gps_fix[0] == '1' || gps_fix[0] == '2')
+			have_link = 1;
+		else
+			have_link = 0;
+
+		i=0;
+		j++;
+		while(message[j] != ',') {
+			*(no_sat+i) = *(message+j);
+			i++;
+			j++;
+		}
+		*(no_sat+i) = '\0';
+		*LEDs = atoi(no_sat);
+
+		printf("message id = '%s'\n", message_id);
+		printf("utc time = '%s'\n", utc_time);
+		printf("latitude = '%s'\n", latitude);
+		printf("n/s indicator = '%s'\n", ns_ind);
+		printf("longitude = '%s'\n", longitude);
+		printf("e/w indicator = '%s'\n", ew_ind);
+		printf("gps link = '%s'\n", gps_fix);
+		printf("# of satelites = '%s'\n", no_sat);
+
+	}
+	fclose(fp);
+	return have_link;
+}
+
+int erase_log() {
+	const char * REPLY = "$PTMK001,184,3*3D";
+	const char * ERASE = "$PMTK184,1*22\r\n";
+	char test = "HELLO\r\n";
+	FILE* fp;
+	int check_type = 1;
+	char incoming;
+	char message[20];
+	int i=0;
+	int hash;
+	fp = fopen("/dev/uart_0", "r+");
+		if(fp == NULL)
+			printf("RS232 error. \n");
+		else {
+			fwrite(ERASE, strlen(ERASE), 1, fp);
+
+			while(check_type){
+						while(incoming != '$') {
+							incoming = getc(fp);
+						}
+						i=0;
+						while(incoming != '\r') {
+							*(message+i) = incoming;
+							incoming = getc(fp);
+							i++;
+						}
+						*(message+i) = '\0';
+						hash = strncmp(message, REPLY, 16);
+						printf("%s check = '%d'\n", message, hash);
+						if(hash == 0) {
+							check_type = 0;
+						}
+			}
+		}
+		printf("sent\n");
+	fclose(fp);
+	return 0;
+}
