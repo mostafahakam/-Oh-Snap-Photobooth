@@ -36,6 +36,16 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
+@app.before_request
+def before_request():
+    db.connect()
+
+
+@app.after_request
+def after_request(response):
+    db.close()
+    return response
+
 @app.route('/checkout_db', methods=['GET', 'POST'])
 def peek_db():
     checkout_db()
