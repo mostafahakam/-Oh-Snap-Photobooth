@@ -21,6 +21,7 @@ from flask import Flask, jsonify, request, redirect
 import json
 from db import *
 from playhouse.shortcuts import model_to_dict, dict_to_model
+import base64
 
 # You can change this to any folder on your system
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -56,7 +57,8 @@ def new_image(user_id):
         if file and allowed_file(file.filename):
             # Load the uploaded image file
             img = face_recognition.load_image_file(file)
-            encoded_string = base.b64encode(file.read())
+
+            encoded_string = base64.encodestring(file.read())
 
             # Get face encodings for any faces in the uploaded image
             face_encodings = face_recognition.face_encodings(img)[0]
