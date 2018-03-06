@@ -35,11 +35,10 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
 @app.route('/checkout_db', methods=['GET', 'POST'])
 def peek_db():
-	checkout_db()
-	return 1
+    checkout_db()
+    return 1
 
 
 @app.route('/new_face/<user_id>', methods=['POST'])
@@ -65,13 +64,10 @@ def new_image(user_id):
             # Add row to DB
             addUser(user_id, face_encodings, encoded_string)
 
-
-
             return "Success"
 
     # If no valid image file was uploaded, show the file upload form:
     return 'Image uploaded not valid'
-
 
 
 @app.route('/detect_face', methods=['GET', 'POST'])
@@ -113,16 +109,13 @@ def detect_faces_in_image(file_stream):
                 result = row.user_id
                 break
 
-
-
     if result == false:
-	    ret = { "face_found_in_image": face_found, "picture_of": "Unrecognized"}
+        ret = {"face_found_in_image": face_found, "picture_of": "Unrecognized"}
 
-	else:
-	    ret = {"face_found_in_image": face_found, "picture_of": result}
+    else:
+        ret = {"face_found_in_image": face_found, "picture_of": result}
 
     return jsonify(ret)
-
 
 
 if __name__ == "__main__":
