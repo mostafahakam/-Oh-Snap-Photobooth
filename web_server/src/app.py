@@ -73,6 +73,8 @@ def new_image(user_id):
             # Get face encodings for any faces in the uploaded image
             face_encodings = face_recognition.face_encodings(img)[0]
 
+            print(user_id, face_encodings, encoded_string)
+            
             # Add row to DB
             addUser(user_id, face_encodings, encoded_string)
 
