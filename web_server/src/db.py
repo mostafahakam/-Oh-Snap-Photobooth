@@ -28,4 +28,4 @@ def getUser_id(img_encoding):
 
 def checkout_db():
 	for row in Row.select():
-		print(row.user_id, row.img_base64)
+		print(Row.user_id, Row.img_base64)
