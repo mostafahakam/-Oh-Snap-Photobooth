@@ -1,18 +1,18 @@
 from peewee import *
-from playhouse.sqlite_ext import SqliteExtDatabase
+from playhouse.postgres_ext import *
 import datetime
 
-db = SqliteExtDatabase('database.db')
+db = PostgresqlExtDatabase('database', user='postgres')
 
 
-class BaseModel(Model):
+class BaseExtModel(Model):
     class Meta:
         database = db
 
 
-class Row(BaseModel):
+class Row(BaseExtModel):
     user_id = TextField()
-    img_encoding = TextField()
+    img_encoding = ArrayField(CharField)
     img_base64 = TextField()
     #created_date = DateTimeField(default=datetime.datetime.now)
 
