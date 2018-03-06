@@ -18,6 +18,9 @@
 
 import face_recognition
 from flask import Flask, jsonify, request, redirect
+import json
+from db import *
+from playhouse.shortcuts import model_to_dict, dict_to_model
 
 # You can change this to any folder on your system
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
@@ -32,8 +35,15 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route('/new_face/<username>', methods=['POST'])
-def new_image(username):
+
+@app.route('/checkout_db', methods=['GET', 'POST'])
+def peek_db():
+	checkout_db()
+	return 1
+	
+
+@app.route('/new_face/<user_id>', methods=['POST'])
+def new_image(user_id):
     # Check if a valid image file was uploaded
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -47,10 +57,15 @@ def new_image(username):
         if file and allowed_file(file.filename):
             # Load the uploaded image file
             img = face_recognition.load_image_file(file)
-            # Get face encodings for any faces in the uploaded image
-            face_encodings = face_recognition.face_encodings(img)
+            encoded_string = base.b64encode(file.read())
 
-            all_encodings[username] = face_encodings
+            # Get face encodings for any faces in the uploaded image
+            face_encodings = face_recognition.face_encodings(img)[0]
+
+            # Add row to DB
+            addUser(user_id, face_encodings, encoded_string)
+
+
 
             return "Success"
 
@@ -86,25 +101,35 @@ def detect_faces_in_image(file_stream):
     unknown_face_encodings = face_recognition.face_encodings(img)
 
     face_found = False
+    result = False
 
     if len(unknown_face_encodings) > 0:
         face_found = True
         # See if the first face in the uploaded image matches the known face of Obama
 
-        for key in all_encodings:
-            match_results = face_recognition.compare_faces(all_encodings[key], unknown_face_encodings[0])
+        for row in Row.select():
+            match_results = face_recognition.compare_faces(row.img_encoding, unknown_face_encodings[0])
             if match_results[0]:
-                result = key
+                result = row.user_id
+                break
 
 
 
+    if result == false:
+	    ret = {
+	        "face_found_in_image": face_found,
+	        "picture_of": "Unrecognized"
+	    }
 
-    # Return the result as json
-    ret = {
-        "face_found_in_image": face_found,
-        "picture_of": result
-    }
+	else:
+	    # Return the result as json
+	    ret = {
+	        "face_found_in_image": face_found,
+	        "picture_of": result
+	    }
     return jsonify(ret)
+
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001, debug=True)
