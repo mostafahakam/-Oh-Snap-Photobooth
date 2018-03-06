@@ -116,16 +116,10 @@ def detect_faces_in_image(file_stream):
 
 
     if result == false:
-	    ret = {
-	        "face_found_in_image": face_found,
-	        "picture_of": "Unrecognized"
-	    }
+	    ret = { "face_found_in_image": face_found, "picture_of": "Unrecognized"}
 
 	else:
-	    ret = {
-	        "face_found_in_image": face_found,
-	        "picture_of": result
-	    }
+	    ret = {"face_found_in_image": face_found, "picture_of": result}
 
     return jsonify(ret)
 
