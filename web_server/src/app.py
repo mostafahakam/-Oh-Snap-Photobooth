@@ -40,7 +40,7 @@ def allowed_file(filename):
 def peek_db():
 	checkout_db()
 	return 1
-	
+
 
 @app.route('/new_face/<user_id>', methods=['POST'])
 def new_image(user_id):
@@ -122,11 +122,11 @@ def detect_faces_in_image(file_stream):
 	    }
 
 	else:
-	    # Return the result as json
 	    ret = {
 	        "face_found_in_image": face_found,
 	        "picture_of": result
 	    }
+
     return jsonify(ret)
 
 
