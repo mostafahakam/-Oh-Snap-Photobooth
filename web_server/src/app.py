@@ -120,7 +120,8 @@ def detect_faces_in_image(file_stream):
         # See if the first face in the uploaded image matches the known face of Obama
 
         for row in Row.select():
-            match_results = face_recognition.compare_faces(np.fromstring(row.img_encoding, dtype=np.uint8), unknown_face_encodings[0])
+            curr_encoding = row.img_encoding
+            match_results = face_recognition.compare_faces(np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype).reshape(unknown_face_encodings[0].shape), unknown_face_encodings[0])
             if match_results[0]:
                 result = row.user_id
                 break
