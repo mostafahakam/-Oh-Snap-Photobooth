@@ -74,10 +74,10 @@ def new_image(user_id):
             face_encodings = face_recognition.face_encodings(img)[0]
 
 
-            print(user_id, face_encodings.tostring(), encoded_string)
+            #print(user_id, face_encodings.tostring(), encoded_string)
 
             # Add row to DB
-            addUser(user_id, face_encodings, 'encoded_string')
+            addUser(user_id, face_encodings.tostring(), 'encoded_string')
 
             return "Success"
 
@@ -119,7 +119,7 @@ def detect_faces_in_image(file_stream):
         # See if the first face in the uploaded image matches the known face of Obama
 
         for row in Row.select():
-            match_results = face_recognition.compare_faces(row.img_encoding, unknown_face_encodings[0])
+            match_results = face_recognition.compare_faces(np.fromstring(row.img_encoding,dtype=int), unknown_face_encodings[0])
             if match_results[0]:
                 result = row.user_id
                 break
