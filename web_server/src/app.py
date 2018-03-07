@@ -77,7 +77,7 @@ def new_image(user_id):
             #print(user_id, face_encodings.tostring(), encoded_string)
 
             # Add row to DB
-            addUser(user_id, face_encodings.tostring(), 'encoded_string')
+            addUser(user_id, np.array_str(face_encodings), 'encoded_string')
 
             return "Success"
 
