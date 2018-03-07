@@ -22,6 +22,7 @@ import json
 from db import *
 from playhouse.shortcuts import model_to_dict, dict_to_model
 import base64
+import numpy as np
 
 # You can change this to any folder on your system
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
