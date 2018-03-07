@@ -29,3 +29,9 @@ def getUser_id(img_encoding):
 def checkout_db():
     for row in Row.select():
         print(Row.user_id, Row.img_base64)
+
+
+def create_tables():
+    with db:
+        db.create_tables([Row])
+        
