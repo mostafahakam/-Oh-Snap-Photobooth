@@ -18,6 +18,7 @@
 
 import face_recognition
 from flask import Flask, jsonify, request, redirect
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 import json
 from db import *
 from playhouse.shortcuts import model_to_dict, dict_to_model
@@ -27,9 +28,12 @@ import numpy as np
 # You can change this to any folder on your system
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-all_encodings = {}
 
 app = Flask(__name__)
+photos = UploadSet('photos', IMAGES)
+
+app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
+configure_uploads(app, photos)
 
 
 def allowed_file(filename):
@@ -74,7 +78,8 @@ def new_image(user_id):
             # Get face encodings for any faces in the uploaded image
             face_encodings = face_recognition.face_encodings(img)[0]
 
-
+            filename = photos.save(file)
+            print(filename)
             #print(user_id, face_encodings.tostring(), encoded_string)
 
             # Add row to DB
