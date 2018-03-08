@@ -78,7 +78,7 @@ def new_image(user_id):
             #print(user_id, face_encodings.tostring(), encoded_string)
 
             # Add row to DB
-            addUser(user_id, face_encodings.dumps(), 'encoded_string')
+            addUser(user_id, face_encodings, 'encoded_string')
 
             return "Success"
 
@@ -123,7 +123,7 @@ def detect_faces_in_image(file_stream):
             curr_encoding = row.img_encoding
             #np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype).reshape(unknown_face_encodings[0].shape)
 
-            match_results = face_recognition.compare_faces(curr_encoding.loads(), unknown_face_encodings[0])
+            match_results = face_recognition.compare_faces(curr_encoding, unknown_face_encodings[0])
             if match_results[0]:
                 result = row.user_id
                 break
