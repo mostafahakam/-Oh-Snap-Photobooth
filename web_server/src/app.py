@@ -130,7 +130,7 @@ def detect_faces_in_image(file_stream):
                 result = row.user_id
                 break
 
-    if result == false:
+    if result == False:
         ret = {"face_found_in_image": face_found, "picture_of": "Unrecognized"}
 
     else:
