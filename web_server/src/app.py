@@ -121,7 +121,7 @@ def detect_faces_in_image(file_stream):
 
         for row in Row.select():
             curr_encoding = row.img_encoding
-            np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype).reshape
+            np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
             #np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
             #np_array = np.frombuffer(curr_encoding, dtype=unknown_face_encodings[0].dtype)
 
