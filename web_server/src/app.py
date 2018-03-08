@@ -121,11 +121,11 @@ def detect_faces_in_image(file_stream):
 
         for row in Row.select():
             curr_encoding = row.img_encoding
-            #np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype).reshape(unknown_face_encodings[0].shape)
+            np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
             #np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
             #np_array = np.frombuffer(curr_encoding, dtype=unknown_face_encodings[0].dtype)
 
-            match_results = face_recognition.compare_faces(np.fromstring(curr_encoding), unknown_face_encodings[0])
+            match_results = face_recognition.compare_faces(np_array, unknown_face_encodings[0])
             if match_results[0]:
                 result = row.user_id
                 break
