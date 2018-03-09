@@ -17,24 +17,22 @@
 # $ pip3 install flask
 
 import face_recognition
-from flask import Flask, jsonify, request, redirect, send_file
+from flask import Flask, jsonify, request, redirect, send_file, url_for
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 import json
 from db import *
 from playhouse.shortcuts import model_to_dict, dict_to_model
 import base64
 import numpy as np
+import os
+from werkzeug.utils import secure_filename
 
-# You can change this to any folder on your system
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
+UPLOAD_FOLDER = '/var/www/static/img'
 
 app = Flask(__name__)
-photos = UploadSet('photos', IMAGES)
 
-app.config['UPLOADED_PHOTOS_DEST'] = '/var/www/static/img'
-configure_uploads(app, photos)
-
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -78,7 +76,8 @@ def new_image(user_id):
             # Get face encodings for any faces in the uploaded image
             face_encodings = face_recognition.face_encodings(img)[0]
 
-            filename = photos.save(file)
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print(filename)
             #print(user_id, face_encodings.tostring(), encoded_string)
 
