@@ -71,7 +71,6 @@ def new_image(user_id):
             # Load the uploaded image file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print(filename)
 
             img = face_recognition.load_image_file(file)
 
@@ -85,7 +84,7 @@ def new_image(user_id):
             #print(user_id, face_encodings.tostring(), encoded_string)
 
             # Add row to DB
-            addUser(user_id, face_encodings.tostring(), 'encoded_string')
+            addUser(user_id, face_encodings.tostring(), filename)
 
             return "Success"
 
@@ -113,8 +112,13 @@ def upload_image():
     return 'Image uploaded not valid'
 
 
-# @app.route('/get_images/<user_id>', methods=['GET'])
-# def ret_images(user_id):
+@app.route('/get_images/<user_id>', methods=['GET'])
+def ret_images(user_id):
+	all_images = []
+	for row in Row.select().where(Row.user_id == user_id):
+		all_images.append(Row.file_name)
+
+	return jsonify(all_images)
 
 
 
@@ -134,8 +138,6 @@ def detect_faces_in_image(file_stream):
         for row in Row.select():
             curr_encoding = row.img_encoding
             np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
-            #np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
-            #np_array = np.frombuffer(curr_encoding, dtype=unknown_face_encodings[0].dtype)
 
             match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[0])
             if match_results[0]:

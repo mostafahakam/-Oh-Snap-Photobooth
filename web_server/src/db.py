@@ -13,12 +13,12 @@ class BaseModel(Model):
 class Row(BaseModel):
     user_id = TextField()
     img_encoding = BlobField()
-    img_base64 = TextField()
+    file_name = TextField()
     #created_date = DateTimeField(default=datetime.datetime.now)
 
 
-def addUser(user_id, img_encoding, img_base64):
-    t = Row.create(user_id=user_id, img_encoding=img_encoding, img_base64= img_base64)
+def addUser(user_id, img_encoding, file_name):
+    t = Row.create(user_id=user_id, img_encoding=img_encoding, file_name= file_name)
     t.save()
 
 
