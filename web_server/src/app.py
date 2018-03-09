@@ -116,7 +116,7 @@ def upload_image():
 def ret_images(user_id):
 	all_images = []
 	for row in Row.select().where(Row.user_id == user_id):
-		all_images.append(Row.file_name)
+		all_images.append(Row.file_name.tostring())
 
 	return jsonify(all_images)
 
