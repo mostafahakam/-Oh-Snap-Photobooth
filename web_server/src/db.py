@@ -38,7 +38,8 @@ def new_User(user_id, password):
 	t.save()
 
 def get_User_pass(user_id):
-	return Auth.select().where(Auth.user_id == user_id)[0].password
+	for row in Auth.select().where(Auth.user_id == user_id):
+		return row.password
 
 def create_tables():
     with db:
