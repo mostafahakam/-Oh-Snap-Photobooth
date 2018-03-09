@@ -9,6 +9,9 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+class Auth(BaseModel):
+	user_id = CharField(unique=True)
+	password = BlobField()
 
 class Row(BaseModel):
     user_id = TextField()
@@ -30,8 +33,14 @@ def checkout_db():
     for row in Row.select():
         print(Row.user_id, Row.img_base64)
 
+def new_User(user_id, password):
+	t = Auth.create(user_id=user_id, password=password)
+	t.save()
+
+def get_User_pass(user_id):
+	return Auth.select().where(Auth.user_id == user_id)
 
 def create_tables():
     with db:
-        db.create_tables([Row])
+        db.create_tables([Row, Auth])
         

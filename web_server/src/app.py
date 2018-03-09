@@ -1,31 +1,16 @@
-# This is a _very simple_ example of a web service that recognizes faces in uploaded images.
-# Upload an image file and it will check if the image contains a picture of Barack Obama.
-# The result is returned as json. For example:
-#
-# $ curl -XPOST -F "file=@obama2.jpg" http://127.0.0.1:5001
-#
-# Returns:
-#
-# {
-#  "face_found_in_image": true,
-#  "is_picture_of_obama": true
-# }
-#
-# This example is based on the Flask file upload example: http://flask.pocoo.org/docs/0.12/patterns/fileuploads/
-
-# NOTE: This example requires flask to be installed! You can install it with pip:
-# $ pip3 install flask
-
 import face_recognition
 from flask import Flask, jsonify, request, redirect, send_file, url_for
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 import json
-from db import *
 from playhouse.shortcuts import model_to_dict, dict_to_model
 import base64
 import numpy as np
 import os
 from werkzeug.utils import secure_filename
+import hashlib
+
+from db import *
+from auth import *
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = '/var/www/static/img'
@@ -54,6 +39,49 @@ def peek_db():
     checkout_db()
     return 1
 
+@app.route('/register_user', methods=['POST'])
+def new_user():
+	headers = request.headers
+	username =  headers.get('username')
+	password = headers.get('password')
+	if username:
+		if password:
+
+			hashed_password = hash_password(hash_password)
+			new_User(user_id, hash_password)
+
+			return "New User added"
+		else:
+			return "Missing password"
+	else:
+		return "Missing Username"
+
+
+@app.route('/login', methods=['POST'])
+def login():
+	headers = request.headers
+	username =  headers.get('username')
+	password = headers.get('password')
+	if username:
+		if password:
+
+			hashed_password = get_User_pass(username)
+
+			if hashed_password:
+				if check_password(hashed_password, password):
+					return "Pass"
+				else:
+					return "Fail"
+
+			else:
+				return "User not in Database"
+
+			return "New User added"
+		else:
+			return "Missing password"
+	else:
+		return "Missing Username"
+
 
 @app.route('/new_face/<user_id>', methods=['POST'])
 def new_image(user_id):
@@ -74,7 +102,7 @@ def new_image(user_id):
 
             img = face_recognition.load_image_file(file)
 
-            encoded_string = base64.encodestring(file.read())
+            #encoded_string = base64.encodestring(file.read())
 
 
             # Get face encodings for any faces in the uploaded image
