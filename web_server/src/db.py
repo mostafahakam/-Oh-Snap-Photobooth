@@ -10,7 +10,7 @@ class BaseModel(Model):
         database = db
 
 class Auth(BaseModel):
-	user_id = TextField(unique=True)
+	user_id = BlobField(unique=True)
 	password = BlobField()
 
 class Row(BaseModel):
