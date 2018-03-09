@@ -68,6 +68,8 @@ def login():
 			hashed_password = get_User_pass(username)
 
 			if hashed_password:
+				print(hash_password)
+				print(password)
 				if check_password(hashed_password, password):
 					return "Pass"
 				else:
