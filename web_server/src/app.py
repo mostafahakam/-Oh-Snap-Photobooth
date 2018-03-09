@@ -117,7 +117,7 @@ def ret_images(user_id):
 	all_images = []
 	for row in Row.select().where(Row.user_id == user_id):
 		file_name = Row.file_name
-		print(filename)
+		print(file_name)
 		all_images.append(file_name)
 
 	return json.dumps(all_images)
