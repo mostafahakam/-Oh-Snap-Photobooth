@@ -116,9 +116,9 @@ def upload_image():
 def ret_images(user_id):
 	all_images = []
 	for row in Row.select().where(Row.user_id == user_id):
-		all_images.append(Row.file_name)
+		all_images.append(model_to_dict(Row.file_name))
 
-	return json.dumps(model_to_dict(all_images))
+	return json.dumps(all_images)
 
 
 
