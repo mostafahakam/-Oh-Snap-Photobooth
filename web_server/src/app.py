@@ -47,7 +47,7 @@ def new_user():
 	if username:
 		if password:
 
-			hashed_password = hash_password(hash_password)
+			hashed_password = hash_password(password)
 			new_User(user_id, hash_password)
 
 			return "New User added"
