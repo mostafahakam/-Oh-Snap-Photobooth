@@ -73,12 +73,14 @@ def new_image(user_id):
 
             encoded_string = base64.encodestring(file.read())
 
-            # Get face encodings for any faces in the uploaded image
-            face_encodings = face_recognition.face_encodings(img)[0]
-
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             print(filename)
+            
+            # Get face encodings for any faces in the uploaded image
+            face_encodings = face_recognition.face_encodings(img)[0]
+
+
             #print(user_id, face_encodings.tostring(), encoded_string)
 
             # Add row to DB
