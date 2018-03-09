@@ -115,8 +115,9 @@ def upload_image():
 @app.route('/get_images/<user_id>', methods=['GET'])
 def ret_images(user_id):
 	all_images = []
-	for row in Row.select().where(Row.user_id == user_id).get():
-		file_name = Row.file_name
+	for row in Row.select().where(Row.user_id == user_id):
+		file_name = Row.file_name.get()
+		print(filename)
 		all_images.append(file_name)
 
 	return json.dumps(all_images)
