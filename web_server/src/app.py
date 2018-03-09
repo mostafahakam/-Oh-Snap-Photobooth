@@ -111,8 +111,8 @@ def upload_image():
     return 'Image uploaded not valid'
 
 
-@app.route('/get_images/<user_id>', methods=['GET'])
-def ret_images(user_id):
+# @app.route('/get_images/<user_id>', methods=['GET'])
+# def ret_images(user_id):
 
 
 
