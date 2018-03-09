@@ -1,5 +1,6 @@
 #Source: https://www.pythoncentral.io/hashing-strings-with-python/
 import hashlib
+import uuid
 
 def hash_password(password):
     #generate random number
