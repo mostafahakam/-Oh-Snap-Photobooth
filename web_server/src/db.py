@@ -30,8 +30,8 @@ def getUser_id(img_encoding):
 
 
 def checkout_db():
-    for row in Row.select():
-        print(Row.user_id, Row.img_base64)
+    for row in Auth.select():
+        print(row.user_id, row.password)
 
 def new_User(user_id, password):
 	t = Auth.create(user_id=user_id, password=password)
