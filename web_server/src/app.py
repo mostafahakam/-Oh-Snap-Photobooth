@@ -17,7 +17,7 @@
 # $ pip3 install flask
 
 import face_recognition
-from flask import Flask, jsonify, request, redirect
+from flask import Flask, jsonify, request, redirect, send_file
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 import json
 from db import *
@@ -32,7 +32,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 app = Flask(__name__)
 photos = UploadSet('photos', IMAGES)
 
-app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
+app.config['UPLOADED_PHOTOS_DEST'] = '/var/www/static/img'
 configure_uploads(app, photos)
 
 
@@ -109,6 +109,11 @@ def upload_image():
 
     # If no valid image file was uploaded, show the file upload form:
     return 'Image uploaded not valid'
+
+
+@app.route('/get_images/<user_id>', methods=['GET'])
+def ret_images(user_id):
+
 
 
 def detect_faces_in_image(file_stream):
