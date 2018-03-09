@@ -69,14 +69,15 @@ def new_image(user_id):
 
         if file and allowed_file(file.filename):
             # Load the uploaded image file
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            print(filename)
+
             img = face_recognition.load_image_file(file)
 
             encoded_string = base64.encodestring(file.read())
 
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            print(filename)
-            
+
             # Get face encodings for any faces in the uploaded image
             face_encodings = face_recognition.face_encodings(img)[0]
 
