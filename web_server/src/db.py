@@ -38,10 +38,12 @@ def new_User(user_id, password):
 	t.save()
 
 def get_User_pass(user_id):
+    hashed_pass = "None"
+
     for row in Auth.select().where(Auth.user_id == user_id):
         hashed_pass = row.password
 
-    if hashed_pass:
+    if hashed_pass != "None":
         return hashed_pass
     else:
         return "Fail"
