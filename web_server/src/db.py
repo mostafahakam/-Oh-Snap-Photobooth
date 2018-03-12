@@ -9,19 +9,21 @@ class BaseModel(Model):
     class Meta:
         database = db
 
+
 class Auth(BaseModel):
-	user_id = TextField(unique=True)
-	password = TextField()
+    user_id = TextField(unique=True)
+    password = TextField()
+
 
 class Row(BaseModel):
     user_id = TextField()
     img_encoding = BlobField()
     file_name = TextField()
-    #created_date = DateTimeField(default=datetime.datetime.now)
+    # created_date = DateTimeField(default=datetime.datetime.now)
 
 
 def addUser(user_id, img_encoding, file_name):
-    t = Row.create(user_id=user_id, img_encoding=img_encoding, file_name= file_name)
+    t = Row.create(user_id=user_id, img_encoding=img_encoding, file_name=file_name)
     t.save()
 
 
@@ -33,9 +35,11 @@ def checkout_db():
     for row in Auth.select():
         print(row.user_id, row.password)
 
+
 def new_User(user_id, password):
-	t = Auth.create(user_id=user_id, password=password)
-	t.save()
+    t = Auth.create(user_id=user_id, password=password)
+    t.save()
+
 
 def get_User_pass(user_id):
     hashed_pass = "None"
@@ -48,7 +52,7 @@ def get_User_pass(user_id):
     else:
         return "Fail"
 
+
 def create_tables():
     with db:
         db.create_tables([Row, Auth])
-        

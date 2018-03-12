@@ -19,6 +19,7 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -34,53 +35,55 @@ def after_request(response):
     db.close()
     return response
 
+
 @app.route('/checkout_db', methods=['GET', 'POST'])
 def peek_db():
     checkout_db()
     return 1
 
+
 @app.route('/register_user', methods=['POST'])
 def new_user():
-	headers = request.headers
-	username =  headers.get('username')
-	password = headers.get('password')
-	if username:
-		if password:
+    headers = request.headers
+    username = headers.get('username')
+    password = headers.get('password')
+    if username:
+        if password:
 
-			hashed_password = hash_password(password)
-			new_User(username, hashed_password)
+            hashed_password = hash_password(password)
+            new_User(username, hashed_password)
 
-			return "New User added"
-		else:
-			return "Missing password"
-	else:
-		return "Missing Username"
+            return "New User added"
+        else:
+            return "Missing password"
+    else:
+        return "Missing Username"
 
 
 @app.route('/login_user', methods=['POST'])
 def login():
-	headers = request.headers
-	username =  headers.get('username')
-	password = headers.get('password')
-	if username:
-		if password:
+    headers = request.headers
+    username = headers.get('username')
+    password = headers.get('password')
+    if username:
+        if password:
 
-			hashed_password = get_User_pass(username)
+            hashed_password = get_User_pass(username)
 
-			if hashed_password != "Fail":
-				if check_password(hashed_password, password):
-					return "Pass"
-				else:
-					return "Fail"
+            if hashed_password != "Fail":
+                if check_password(hashed_password, password):
+                    return "Pass"
+                else:
+                    return "Fail"
 
-			else:
-				return "User not in Database"
+            else:
+                return "User not in Database"
 
-			return "New User added"
-		else:
-			return "Missing password"
-	else:
-		return "Missing Username"
+            return "New User added"
+        else:
+            return "Missing password"
+    else:
+        return "Missing Username"
 
 
 @app.route('/new_face/<user_id>', methods=['POST'])
@@ -102,19 +105,20 @@ def new_image(user_id):
 
             img = face_recognition.load_image_file(file)
 
-            #encoded_string = base64.encodestring(file.read())
+            # encoded_string = base64.encodestring(file.read())
 
+            if face_recognition.face_encodings(img)[0]:
+                # Get face encodings for any faces in the uploaded image
+                face_encodings = face_recognition.face_encodings(img)[0]
 
-            # Get face encodings for any faces in the uploaded image
-            face_encodings = face_recognition.face_encodings(img)[0]
+                # print(user_id, face_encodings.tostring(), encoded_string)
 
+                # Add row to DB
+                addUser(user_id, face_encodings.tostring(), filename)
 
-            #print(user_id, face_encodings.tostring(), encoded_string)
-
-            # Add row to DB
-            addUser(user_id, face_encodings.tostring(), filename)
-
-            return "Success"
+                return "Success"
+            else:
+                return "No Face detected"
 
     # If no valid image file was uploaded, show the file upload form:
     return 'Image uploaded not valid'
@@ -142,13 +146,12 @@ def upload_image():
 
 @app.route('/get_images/<user_id>', methods=['GET'])
 def ret_images(user_id):
-	all_images = []
-	for row in Row.select().where(Row.user_id == user_id):
-		file_name = row.file_name
-		all_images.append(file_name)
+    all_images = []
+    for row in Row.select().where(Row.user_id == user_id):
+        file_name = row.file_name
+        all_images.append(file_name)
 
-	return json.dumps(all_images)
-
+    return json.dumps(all_images)
 
 
 def detect_faces_in_image(file_stream):
