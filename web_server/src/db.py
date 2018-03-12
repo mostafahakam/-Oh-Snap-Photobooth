@@ -40,7 +40,11 @@ def new_User(user_id, password):
 def get_User_pass(user_id):
 	for row in Auth.select().where(Auth.user_id == user_id):
 		hashed_pass = row.password
-	return hashed_pass
+
+    if hashed_pass:
+	   return hashed_pass
+    else:
+       return "Fail"
 
 def create_tables():
     with db:

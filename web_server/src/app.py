@@ -67,7 +67,7 @@ def login():
 
 			hashed_password = get_User_pass(username)
 
-			if hashed_password:
+			if hashed_password != "Fail":
 				if check_password(hashed_password, password):
 					return "Pass"
 				else:
