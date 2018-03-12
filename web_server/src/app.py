@@ -57,7 +57,7 @@ def new_user():
 		return "Missing Username"
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login_user', methods=['POST'])
 def login():
 	headers = request.headers
 	username =  headers.get('username')
