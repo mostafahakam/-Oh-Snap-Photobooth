@@ -139,6 +139,9 @@ def upload_image():
 
         if file and allowed_file(file.filename):
             # The image file seems valid! Detect faces and return the result.
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
             return detect_faces_in_image(file)
 
     # If no valid image file was uploaded, show the file upload form:
