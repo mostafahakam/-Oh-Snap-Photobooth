@@ -51,9 +51,10 @@ def new_user():
         if password:
 
             hashed_password = hash_password(password)
-            new_User(username, hashed_password)
-
-            return "New User added"
+            if(new_User(username, hashed_password))
+                return "New User added"
+            else:
+                return "Username already exists"
         else:
             return "Missing password"
     else:
@@ -176,7 +177,7 @@ def detect_faces_in_image(file_stream):
                 result = row.user_id
                 break
 
-    if result == False:
+    if not result:
         ret = {"face_found_in_image": face_found, "picture_of": "Unrecognized"}
 
     else:

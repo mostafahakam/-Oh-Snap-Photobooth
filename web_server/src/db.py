@@ -11,7 +11,7 @@ class BaseModel(Model):
 
 
 class Auth(BaseModel):
-    user_id = TextField(unique=True)
+    user_id = TextField()
     password = TextField()
 
 
@@ -37,8 +37,12 @@ def checkout_db():
 
 
 def new_User(user_id, password):
-    t = Auth.create(user_id=user_id, password=password)
-    t.save()
+    if len(Auth.select().where(Auth.user_id == user_id)) > 0:
+        return 0
+    else:
+        t = Auth.create(user_id=user_id, password=password)
+        t.save()
+        return 1
 
 
 def get_User_pass(user_id):
