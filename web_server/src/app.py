@@ -51,7 +51,7 @@ def new_user():
         if password:
 
             hashed_password = hash_password(password)
-            if(new_User(username, hashed_password))
+            if new_User(username, hashed_password):
                 return "New User added"
             else:
                 return "Username already exists"
