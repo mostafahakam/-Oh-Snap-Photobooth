@@ -21,7 +21,6 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -118,7 +117,7 @@ def new_image(user_id):
                 # print(user_id, face_encodings.tostring(), encoded_string)
 
                 # Add row to DB
-                
+
                 addUser(user_id, face_encodings.tostring(), filename)
 
                 return "Success"
@@ -162,12 +161,12 @@ def ret_images(user_id):
     return json.dumps(all_images)
 
 
-@app.route('upload_to_instagram/<filename>', methods=['POST'])
+@app.route('/upload_to_instagram/<filename>', methods=['POST'])
 def post_to_ig(filename):
-	upload_to_Instagram(filename)
+    upload_to_Instagram(filename)
 
-	return "Success"
-	
+    return "Success"
+
 
 def detect_faces_in_image(file_stream):
     # Load the uploaded image file
@@ -198,8 +197,6 @@ def detect_faces_in_image(file_stream):
         ret = {"face_found_in_image": face_found, "picture_of": result}
 
     return jsonify(ret)
-
-
 
 
 if __name__ == "__main__":
