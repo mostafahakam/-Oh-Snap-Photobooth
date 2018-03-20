@@ -110,23 +110,37 @@ def new_image(user_id):
 
             img = face_recognition.load_image_file(file)
 
+            face_encodings = face_recognition.face_encodings(img)
+
             # encoded_string = base64.encodestring(file.read())
 
-            if len(face_recognition.face_encodings(img)):
+            if len(face_encodings):
                 # Get face encodings for any faces in the uploaded image
-                face_encodings = face_recognition.face_encodings(img)[0]
-
                 # print(user_id, face_encodings.tostring(), encoded_string)
 
                 # Add row to DB
 
-                addUser(user_id, face_encodings.tostring(), filename)
+                addUser(user_id, face_encodings[0].tostring(), filename)
 
                 print("New_face: Found face, success")
-                return "Success"
+
+                response = app.response_class(
+                    response="Success",
+                    status=200,
+                    mimetype='application/json'
+                )
+                return response
+
             else:
                 print("New_face: No face found, failed")
-                return "No Face detected"
+
+                response = app.response_class(
+                    response="No face detected",
+                    status=404,
+                    mimetype='application/json'
+                )
+                return response
+
 
     # If no valid image file was uploaded, show the file upload form:
     return 'Image uploaded not valid'
