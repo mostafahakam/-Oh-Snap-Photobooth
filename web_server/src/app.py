@@ -102,6 +102,8 @@ def new_image(user_id):
             return redirect(request.url)
 
         if file and allowed_file(file.filename):
+            print(file.filename)
+            
             # Load the uploaded image file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
