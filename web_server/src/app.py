@@ -122,8 +122,10 @@ def new_image(user_id):
 
                 addUser(user_id, face_encodings.tostring(), filename)
 
+                print("New_face: Found face, success")
                 return "Success"
             else:
+                print("New_face: No face found, failed")
                 return "No Face detected"
 
     # If no valid image file was uploaded, show the file upload form:
