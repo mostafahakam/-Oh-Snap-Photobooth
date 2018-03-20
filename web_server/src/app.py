@@ -93,6 +93,8 @@ def login():
 @app.route('/new_face/<user_id>', methods=['POST', 'GET'])
 def new_image(user_id):
     # Check if a valid image file was uploaded
+    print request
+    
     if request.method == 'GET' or request.method == 'POST':
         if 'file' not in request.files:
             return redirect(request.url)
