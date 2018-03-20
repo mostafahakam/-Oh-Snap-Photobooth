@@ -11,6 +11,7 @@ import hashlib
 
 from db import *
 from auth import *
+from social_media import *
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 UPLOAD_FOLDER = '/var/www/static/img'
@@ -18,6 +19,7 @@ UPLOAD_FOLDER = '/var/www/static/img'
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 
 def allowed_file(filename):
@@ -47,6 +49,7 @@ def new_user():
     headers = request.headers
     username = headers.get('username')
     password = headers.get('password')
+
     if username:
         if password:
 
@@ -115,6 +118,7 @@ def new_image(user_id):
                 # print(user_id, face_encodings.tostring(), encoded_string)
 
                 # Add row to DB
+                
                 addUser(user_id, face_encodings.tostring(), filename)
 
                 return "Success"
@@ -158,6 +162,13 @@ def ret_images(user_id):
     return json.dumps(all_images)
 
 
+@app.route('upload_to_instagram/<filename>', methods=['POST'])
+def post_to_ig(filename):
+	upload_to_Instagram(filename)
+
+	return "Success"
+	
+
 def detect_faces_in_image(file_stream):
     # Load the uploaded image file
     img = face_recognition.load_image_file(file_stream)
@@ -187,6 +198,8 @@ def detect_faces_in_image(file_stream):
         ret = {"face_found_in_image": face_found, "picture_of": result}
 
     return jsonify(ret)
+
+
 
 
 if __name__ == "__main__":
