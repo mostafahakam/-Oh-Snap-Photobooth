@@ -8,6 +8,7 @@ import numpy as np
 import os
 from werkzeug.utils import secure_filename
 import hashlib
+from InstagramAPI import InstagramAPI
 
 from db import *
 from auth import *
@@ -19,7 +20,7 @@ UPLOAD_FOLDER = '/var/www/static/img'
 app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
+api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -165,9 +166,22 @@ def ret_images(user_id):
 
 @app.route('/upload_to_instagram/<filename>', methods=['POST'])
 def post_to_ig(filename):
-    upload_to_Instagram(self, filename)
+    upload_to_Instagram(filename)
 
     return "Success"
+
+
+def upload_to_Instagram(filename):
+    if api.login():
+        api.getSelfUserFeed()  # get self user feed
+        print(api.LastJson)  # print last response JSON
+        print("Login succes!")
+    else:
+        print("Can't login!")
+
+    photo_path = '/var/www/static/img/' + filename
+    caption = "Testing"
+    InstagramAPI.uploadPhoto(photo_path, caption=caption)
 
 
 def detect_faces_in_image(file_stream):
