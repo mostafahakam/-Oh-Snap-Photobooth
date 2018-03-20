@@ -112,7 +112,7 @@ def new_image(user_id):
 
             # encoded_string = base64.encodestring(file.read())
 
-            if len(face_recognition.face_encodings(img)[0]):
+            if len(face_recognition.face_encodings(img)):
                 # Get face encodings for any faces in the uploaded image
                 face_encodings = face_recognition.face_encodings(img)[0]
 
