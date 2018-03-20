@@ -9,6 +9,7 @@ import os
 from werkzeug.utils import secure_filename
 import hashlib
 
+
 from db import *
 from auth import *
 from social_media import *
@@ -104,9 +105,11 @@ def new_image(user_id):
         if file and allowed_file(file.filename):
             print(file.filename)
 
+            file =
             # Load the uploaded image file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
 
             img = face_recognition.load_image_file(file)
 
