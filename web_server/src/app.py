@@ -92,7 +92,7 @@ def login():
 @app.route('/new_face/<user_id>', methods=['POST', 'GET'])
 def new_image(user_id):
     # Check if a valid image file was uploaded
-    if request.method == 'POST':
+    if request.method == 'GET' or request.method == 'POST':
         if 'file' not in request.files:
             return redirect(request.url)
 
@@ -103,7 +103,7 @@ def new_image(user_id):
 
         if file and allowed_file(file.filename):
             print(file.filename)
-            
+
             # Load the uploaded image file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
