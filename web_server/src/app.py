@@ -89,7 +89,7 @@ def login():
         return "Missing Username"
 
 
-@app.route('/new_face/<user_id>', methods=['POST'])
+@app.route('/new_face/<user_id>', methods=['POST', 'GET'])
 def new_image(user_id):
     # Check if a valid image file was uploaded
     if request.method == 'POST':
