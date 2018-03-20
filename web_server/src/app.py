@@ -105,7 +105,6 @@ def new_image(user_id):
         if file and allowed_file(file.filename):
             print(file.filename)
 
-            file =
             # Load the uploaded image file
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
