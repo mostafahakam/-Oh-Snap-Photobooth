@@ -1,4 +1,4 @@
-import InstagramAPI
+from InstagramAPI import InstagramAPI
 
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
