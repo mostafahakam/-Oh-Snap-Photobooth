@@ -165,7 +165,7 @@ def ret_images(user_id):
 
 @app.route('/upload_to_instagram/<filename>', methods=['POST'])
 def post_to_ig(filename):
-    upload_to_Instagram(filename)
+    upload_to_Instagram(self, filename)
 
     return "Success"
 
