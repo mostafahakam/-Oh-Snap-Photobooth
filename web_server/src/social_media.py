@@ -1,4 +1,5 @@
 from InstagramAPI import InstagramAPI
+from PIL import Image
 
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
@@ -18,5 +19,9 @@ def upload_to_Instagram(filename):
 
     print("Is logged in: " + str(api.isLoggedIn))
     photo_path = '/var/www/static/img/' + filename
+    img = Image.open(photo_path)
+
+    img.save('instagram/'+filename.split(".")[0], 'jpg')
     caption = "Testing"
-    api.uploadPhoto(photo_path, caption=caption)
+
+    api.uploadPhoto('instagram/'+filename.split(".")[0] + '.jpg', caption=caption)
