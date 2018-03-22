@@ -8,7 +8,7 @@ import numpy as np
 import os
 from werkzeug.utils import secure_filename
 import hashlib
-from PIL import Image
+
 
 
 from db import *
@@ -107,14 +107,9 @@ def new_image(user_id):
             print(file.filename)
 
             # Load the uploaded image file
-
             filename = secure_filename(file.filename)
             filename = shorten_filename(filename)
-
-            img = Image.open(filename)
-            img.save(filename.split(".")[0], 'jpg')
-
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename.split(".")[0]+"jpg"))
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
             img = face_recognition.load_image_file(file)
