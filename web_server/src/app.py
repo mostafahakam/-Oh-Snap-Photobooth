@@ -107,6 +107,7 @@ def new_image(user_id):
 
             # Load the uploaded image file
             filename = secure_filename(file.filename)
+            filename = shorten_filename(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
@@ -163,6 +164,7 @@ def upload_image():
         if file and allowed_file(file.filename):
             # The image file seems valid! Detect faces and return the result.
             filename = secure_filename(file.filename)
+            filename = shorten_filename(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
             return detect_faces_in_image(file, filename)
@@ -220,6 +222,10 @@ def detect_faces_in_image(file_stream, filename):
 
     return jsonify(ret)
 
+
+def shorten_filename(filename):
+    last_chunk = filename.split("-")[-1]
+    return last_chunk
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001, debug=True)
