@@ -8,6 +8,7 @@ import numpy as np
 import os
 from werkzeug.utils import secure_filename
 import hashlib
+import Image
 
 
 from db import *
@@ -105,9 +106,14 @@ def new_image(user_id):
         if file and allowed_file(file.filename):
             print(file.filename)
 
+            filename = file.filename.split(".")[0] + ".jpg"
+
+            im = Image.open(file)
+            im.save(filename)
             # Load the uploaded image file
-            filename = secure_filename(file.filename)
             filename = shorten_filename(filename)
+
+
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
