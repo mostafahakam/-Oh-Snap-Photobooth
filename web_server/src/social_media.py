@@ -1,7 +1,7 @@
 from InstagramAPI import InstagramAPI
 from PIL import Image
 
-api = InstagramAPI("cpen391_ohsnap", "ohsnap_391pass")
+api = InstagramAPI("cpen391_ohsnap", "ohsnap_pass")
 
 
 def upload_to_Instagram(filename):
