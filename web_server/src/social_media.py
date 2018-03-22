@@ -5,7 +5,7 @@ api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
 def upload_to_Instagram(filename):
 
-    if not api.isLoggedIn():
+    if not api.isLoggedIn:
 
         if api.login():
             api.getSelfUserFeed()  # get self user feed
