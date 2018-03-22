@@ -19,6 +19,5 @@ def upload_to_Instagram(filename):
     photo_path = '/var/www/static/img/' + filename
     caption = "Testing"
     api.uploadPhoto(photo_path, caption=caption)
-    api.logout()
 
 
