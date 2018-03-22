@@ -165,7 +165,7 @@ def upload_image():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            return detect_faces_in_image(file)
+            return detect_faces_in_image(file, filename)
 
     # If no valid image file was uploaded, show the file upload form:
     return 'Image uploaded not valid'
@@ -189,7 +189,7 @@ def post_to_ig(filename):
 
 
 
-def detect_faces_in_image(file_stream):
+def detect_faces_in_image(file_stream, filename):
     # Load the uploaded image file
     img = face_recognition.load_image_file(file_stream)
     # Get face encodings for any faces in the uploaded image
@@ -209,6 +209,8 @@ def detect_faces_in_image(file_stream):
             match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[0])
             if match_results[0]:
                 result = row.user_id
+                addUser(result, unknown_face_encodings[0].tostring(), filename)
+
                 break
 
     if not result:
