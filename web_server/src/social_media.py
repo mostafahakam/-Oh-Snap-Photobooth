@@ -16,6 +16,7 @@ def upload_to_Instagram(filename):
             print("Can't login!")
             return
 
+    print("Is logged in: " + api.isLoggedIn)
     photo_path = '/var/www/static/img/' + filename
     caption = "Testing"
     api.uploadPhoto(photo_path, caption=caption)
