@@ -210,7 +210,6 @@ def detect_faces_in_image(file_stream, filename):
             if match_results[0]:
                 result = row.user_id
                 addUser(result, unknown_face_encodings[0].tostring(), filename)
-
                 break
 
     if not result:
