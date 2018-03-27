@@ -9,8 +9,6 @@ import os
 from werkzeug.utils import secure_filename
 import hashlib
 
-
-
 from db import *
 from auth import *
 from social_media import *
@@ -111,7 +109,6 @@ def new_image(user_id):
             filename = shorten_filename(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-
             img = face_recognition.load_image_file(file)
 
             face_encodings = face_recognition.face_encodings(img)
@@ -152,7 +149,6 @@ def new_image(user_id):
                     mimetype='application/json'
                 )
                 return response
-
 
     # If no valid image file was uploaded, show the file upload form:
     return 'Image uploaded not valid'
@@ -199,6 +195,17 @@ def post_to_ig(filename):
     return "Success"
 
 
+@app.route('/clear_db/<table>', methods=['POST'])
+def clear_db(table):
+    if table == 'auth':
+        clear_auth_table()
+    elif table == 'row':
+        clear_row_table()
+    elif table == 'all':
+        clear_all_tables()
+
+    return "Cleared"
+
 
 def detect_faces_in_image(file_stream, filename):
     # Load the uploaded image file
@@ -208,7 +215,6 @@ def detect_faces_in_image(file_stream, filename):
 
     face_found = False
     result = []
-
 
     for i in range(0, len(unknown_face_encodings)):
         face_found = True
@@ -224,7 +230,6 @@ def detect_faces_in_image(file_stream, filename):
                 addUser(result, unknown_face_encodings[0].tostring(), filename)
                 break
 
-
     if not result:
         ret = {"face_found_in_image": face_found, "picture_of": "Unrecognized"}
 
@@ -237,6 +242,7 @@ def detect_faces_in_image(file_stream, filename):
 def shorten_filename(filename):
     last_chunk = filename.split("-")[-1]
     return last_chunk
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5001, debug=True)

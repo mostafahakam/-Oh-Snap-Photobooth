@@ -56,6 +56,17 @@ def get_User_pass(user_id):
     else:
         return "Fail"
 
+def clear_auth_table():
+    query = Auth.delete()
+    query.execute()
+
+def clear_row_table():
+    query = Row.delete()
+    query.execute()
+
+def clear_all_tables():
+    clear_auth_table()
+    clear_row_table()
 
 def create_tables():
     with db:
