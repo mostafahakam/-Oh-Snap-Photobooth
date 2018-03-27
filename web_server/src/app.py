@@ -119,6 +119,14 @@ def new_image(user_id):
             # encoded_string = base64.encodestring(file.read())
 
             if len(face_encodings):
+                if len(face_encodings) > 1:
+                    response = app.response_class(
+                        response="Multiple faces detected",
+                        status=404,
+                        mimetype='application/json'
+                    )
+                    return response
+
                 # Get face encodings for any faces in the uploaded image
                 # print(user_id, face_encodings.tostring(), encoded_string)
 
@@ -199,21 +207,23 @@ def detect_faces_in_image(file_stream, filename):
     unknown_face_encodings = face_recognition.face_encodings(img)
 
     face_found = False
-    result = False
+    result = []
 
-    if len(unknown_face_encodings) > 0:
+
+    for i in range(0, len(unknown_face_encodings)):
         face_found = True
         # See if the first face in the uploaded image matches the known face of Obama
 
         for row in Row.select():
             curr_encoding = row.img_encoding
-            np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[0].dtype)
+            np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[i].dtype)
 
-            match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[0])
+            match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[i])
             if match_results[0]:
-                result = row.user_id
+                result.append(row.user_id)
                 addUser(result, unknown_face_encodings[0].tostring(), filename)
                 break
+
 
     if not result:
         ret = {"face_found_in_image": face_found, "picture_of": "Unrecognized"}
