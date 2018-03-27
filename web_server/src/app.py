@@ -108,11 +108,7 @@ def get_social(user_id):
         tw = user.twitter_handle
         fb = user.facebook_handle
 
-    if fb and tw and ig:
-        all_social = [fb, tw, ig]
-    else:
-        all_social = [None, None, None]
-
+    all_social = [fb, tw, ig]
     return json.dumps(all_social)
 
 @app.route('/new_face/<user_id>', methods=['POST', 'GET'])
