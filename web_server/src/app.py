@@ -98,6 +98,19 @@ def update_social(user_id):
 
     return "Success"
 
+@app.route('/get_social/<user_id>', methods=['GET'])
+def get_social(user_id):
+    for user in Social.select().where(Social.user_id == user_id):
+        ig = user.instagram_handle
+        tw = user.twitter_handle
+        fb = user.facebook_handle
+
+    if fb and tw and ig:
+        all_social = [fb, tw, ig]
+    else:
+        all_social = [None, None, None]
+
+    return json.dumps(all_social)
 
 @app.route('/new_face/<user_id>', methods=['POST', 'GET'])
 def new_image(user_id):

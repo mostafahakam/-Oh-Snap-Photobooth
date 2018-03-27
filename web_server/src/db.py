@@ -32,6 +32,8 @@ def addUser(user_id, img_encoding, file_name):
     t.save()
 
 def addUser_social(user_id, ig_handle, tw_handle, fb_handle):
+    query = Social.delete().where(Social.user_id == user_id)
+    query.execute()
     s = Social.create(user_id=user_id, instagram_handle=ig_handle, twitter_handle=tw_handle, facebook_handle=fb_handle)
     s.save()
 
