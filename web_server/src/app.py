@@ -100,9 +100,9 @@ def update_social(user_id):
 
 @app.route('/get_social/<user_id>', methods=['GET'])
 def get_social(user_id):
-    fb = None
-    tw = None
-    ig = None
+    fb = "Null"
+    tw = "Null"
+    ig = "Null"
     for user in Social.select().where(Social.user_id == user_id):
         ig = user.instagram_handle
         tw = user.twitter_handle
