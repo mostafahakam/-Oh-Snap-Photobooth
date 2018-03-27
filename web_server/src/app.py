@@ -88,6 +88,16 @@ def login():
     else:
         return "Missing Username"
 
+@app.route('/update_social/<user_id>', methods=['POST'])
+def update_social(user_id):
+    headers = request.headers
+    ig_handle = headers.get('instagram')
+    tw_handle = headers.get('twitter')
+    fb_handle = headers.get('facebook')
+    addUser_social(user_id, ig_handle, tw_handle, fb_handle)
+
+    return "Success"
+
 
 @app.route('/new_face/<user_id>', methods=['POST', 'GET'])
 def new_image(user_id):
@@ -227,7 +237,7 @@ def detect_faces_in_image(file_stream, filename):
             match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[i])
             if match_results[0]:
                 result.append(row.user_id)
-                addUser(result, unknown_face_encodings[0].tostring(), filename)
+                addUser(result, unknown_face_encodings[i].tostring(), filename)
                 break
 
     if not result:
