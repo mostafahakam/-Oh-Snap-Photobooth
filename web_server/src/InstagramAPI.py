@@ -1,3 +1,5 @@
+# Credits to : https://github.com/LevPasha/Instagram-API-python
+
 import requests
 import random
 import json

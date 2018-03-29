@@ -210,9 +210,14 @@ def ret_images(user_id):
     return json.dumps(all_images)
 
 
-@app.route('/upload_to_instagram/<filename>', methods=['POST'])
-def post_to_ig(filename):
-    upload_to_Instagram(filename)
+@app.route('/upload_to_instagram/<user_id>', methods=['POST'])
+def post_to_ig(user_id):
+    headers = request.headers
+    filename = headers.get('file')
+    for user in Social.select().where(Social.user_id == user_id):
+        ig = user.instagram_handle
+
+    upload_to_Instagram(ig, filename)
 
     return "Success"
 

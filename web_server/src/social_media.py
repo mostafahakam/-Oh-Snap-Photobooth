@@ -1,10 +1,13 @@
 from InstagramAPI import InstagramAPI
-
+import requests
 
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
 
-def upload_to_Instagram(filename):
+def upload_to_Instagram(ig, filename):
+
+    r = requests.get('https://www.instagram.com/' + ig + '/?__a=1')
+    user_pk = r.json()['graphql']['user']['id']
 
     if not api.isLoggedIn:
 
@@ -24,24 +27,14 @@ def upload_to_Instagram(filename):
         {
             'type': 'photo',
             'file': 'logo.jpg',  # Path to the photo file.
-            'usertags': [
-                {  # Optional, lets you tag one or more users in a PHOTO.
-                    'position': [0.0, 0.0],
-                    # WARNING: THE USER ID MUST BE VALID. INSTAGRAM WILL VERIFY IT
-                    # AND IF IT'S WRONG THEY WILL SAY "media configure error".
-                    'user_id': '536372018',  # Must be a numerical UserPK ID.
-                },
-            ]
         },
         {
             'type': 'photo',
             'file': photo_path,  # Path to the photo file.
             'usertags': [
-                {  # Optional, lets you tag one or more users in a PHOTO.
+                {
                     'position': [0.0, 0.0],
-                    # WARNING: THE USER ID MUST BE VALID. INSTAGRAM WILL VERIFY IT
-                    # AND IF IT'S WRONG THEY WILL SAY "media configure error".
-                    'user_id': '536372018',  # Must be a numerical UserPK ID.
+                    'user_id': user_pk,
                 },
             ]
         },
