@@ -238,8 +238,8 @@ class InstagramAPI:
 
             # $itemInternalMetadata = new InternalMetadata();
             # If usertags are provided, verify that the entries are valid.
-            if item.get('usertags', []):
-                self.throwIfInvalidUsertags(item['usertags'])
+            #if item.get('usertags', []):
+            #    self.throwIfInvalidUsertags(item['usertags'])
 
             # Pre-process media details and throw if not allowed on Instagram.
             if item.get('type', '') == 'photo':
