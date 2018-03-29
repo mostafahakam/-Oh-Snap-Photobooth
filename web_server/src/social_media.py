@@ -24,6 +24,14 @@ def upload_to_Instagram(filename):
         {
             'type': 'photo',
             'file': 'logo.jpg',  # Path to the photo file.
+            'usertags': [
+                {  # Optional, lets you tag one or more users in a PHOTO.
+                    'position': [0.0, 0.0],
+                    # WARNING: THE USER ID MUST BE VALID. INSTAGRAM WILL VERIFY IT
+                    # AND IF IT'S WRONG THEY WILL SAY "media configure error".
+                    'user_id': '536372018',  # Must be a numerical UserPK ID.
+                },
+            ]
         },
         {
             'type': 'photo',
