@@ -1,5 +1,6 @@
 from InstagramAPI import InstagramAPI
 import requests
+import face_recognition
 
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
@@ -22,6 +23,13 @@ def upload_to_Instagram(ig, filename):
 
     print("Is logged in: " + str(api.isLoggedIn))
     photo_path = '/var/www/static/img/' + filename
+
+    image = face_recognition.load_image_file(photo_path)
+    face_locations = face_recognition.face_locations(image)
+    face_encodings = face_recognition.face_encodings(image, face_locations)
+
+    for location in face_locations:
+        print(location)
 
     media = [
         {
