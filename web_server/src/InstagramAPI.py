@@ -28,7 +28,6 @@ except:
     # Issue 159, python3 import fix
     from .ImageUtils import getImageSize
 
-from .exceptions import SentryBlockException
 
 
 class InstagramAPI:
