@@ -1,2 +1,2 @@
 class SentryBlockException(Exception):
-    passs
+    pass
