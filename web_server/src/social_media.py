@@ -29,9 +29,12 @@ def upload_to_Instagram(ig, filename):
     image = face_recognition.load_image_file(photo_path)
     face_locations = face_recognition.face_locations(image)
     face_encodings = face_recognition.face_encodings(image, face_locations)
+    width, height = getImageSize(photo_path)
 
-    #for location in face_locations:
-    #    print(location)
+    for (top, right, bottom, left) in face_locations:
+        x = ((right + left)/2)/width
+        y = bottom/height
+
 
     print(getImageSize(photo_path))
 
@@ -45,7 +48,7 @@ def upload_to_Instagram(ig, filename):
             'file': photo_path,  # Path to the photo file.
             'usertags': [
                 {
-                    'position': [0.0, 0.0],
+                    'position': [x, y],
                     'user_id': user_pk,
                 },
             ]
