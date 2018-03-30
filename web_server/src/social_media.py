@@ -5,17 +5,13 @@ import struct
 import imghdr
 import numpy as np
 
-
 from db import *
 from social_media import *
 
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
 
-def upload_to_Instagram(ig, filename):
-
-
-
+def upload_to_Instagram(filename):
     if not api.isLoggedIn:
 
         if api.login():
@@ -56,9 +52,6 @@ def upload_to_Instagram(ig, filename):
                 user_pk = r.json()['graphql']['user']['id']
 
                 usertags.append({'position': [x, y], 'user_id': user_pk})
-
-
-    print(getImageSize(photo_path))
 
     media = [
         {
