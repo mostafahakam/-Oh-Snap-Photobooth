@@ -64,7 +64,7 @@ def upload_to_Instagram(filename):
                 'position': [0.0, 0.0],
                 # WARNING: THE USER ID MUST BE VALID. INSTAGRAM WILL VERIFY IT
                 # AND IF IT'S WRONG THEY WILL SAY "media configure error".
-                'user_id': '536372018',  # Must be a numerical UserPK ID.
+                'user_id': '352713272',  # Must be a numerical UserPK ID.
             },
         ]
 
