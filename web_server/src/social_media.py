@@ -1,6 +1,8 @@
 from InstagramAPI import InstagramAPI
 import requests
 import face_recognition
+import struct
+import imghdr
 
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
@@ -32,7 +34,7 @@ def upload_to_Instagram(ig, filename):
     #    print(location)
 
     print(getImageSize(photo_path))
-    
+
     media = [
         {
             'type': 'photo',
