@@ -68,12 +68,7 @@ def upload_to_Instagram(ig, filename):
         {
             'type': 'photo',
             'file': photo_path,  # Path to the photo file.
-            'usertags': [
-                {
-                    'position': [x, y],
-                    'user_id': user_pk,
-                },
-            ]
+            'usertags': usertags
         },
     ]
     caption = "Testing"
