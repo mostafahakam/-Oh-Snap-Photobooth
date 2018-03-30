@@ -3,6 +3,8 @@ import requests
 import face_recognition
 import struct
 import imghdr
+import numpy as np
+
 
 from db import *
 from social_media import *
