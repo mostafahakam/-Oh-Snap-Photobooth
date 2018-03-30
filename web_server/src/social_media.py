@@ -4,13 +4,15 @@ import face_recognition
 import struct
 import imghdr
 
+from db import *
+from social_media import *
+
 api = InstagramAPI("ohsnap_391", "ohsnap_391pass")
 
 
 def upload_to_Instagram(ig, filename):
 
-    r = requests.get('https://www.instagram.com/' + ig + '/?__a=1')
-    user_pk = r.json()['graphql']['user']['id']
+
 
     if not api.isLoggedIn:
 
@@ -29,11 +31,29 @@ def upload_to_Instagram(ig, filename):
     image = face_recognition.load_image_file(photo_path)
     face_locations = face_recognition.face_locations(image)
     face_encodings = face_recognition.face_encodings(image, face_locations)
+
     width, height = getImageSize(photo_path)
 
-    for (top, right, bottom, left) in face_locations:
-        x = ((right + left)/2)/width
-        y = bottom/height
+    usertags = []
+
+    for i in range(0, len(face_encodings)):
+        for row in Row.select():
+            curr_encoding = row.img_encoding
+            np_array = np.fromstring(curr_encoding, dtype=face_encodings[i].dtype)
+
+            match_results = face_recognition.compare_faces([np_array], face_encodings[i])
+            if match_results[0]:
+                (top, right, bottom, left) = face_locations[i]
+                x = ((right + left) / 2) / width
+                y = bottom / height
+
+                for user in Social.select().where(Social.user_id == user_id):
+                    ig = user.instagram_handle
+
+                r = requests.get('https://www.instagram.com/' + ig + '/?__a=1')
+                user_pk = r.json()['graphql']['user']['id']
+
+                usertags.append({'position': [x, y], 'user_id': user_pk})
 
 
     print(getImageSize(photo_path))
