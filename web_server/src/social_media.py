@@ -49,7 +49,7 @@ def upload_to_Instagram(ig, filename):
                 x = ((right + left) / 2) / width
                 y = bottom / height
 
-                for user in Social.select().where(Social.user_id == user_id):
+                for user in Social.select().where(Social.user_id == row.user_id):
                     ig = user.instagram_handle
 
                 r = requests.get('https://www.instagram.com/' + ig + '/?__a=1')
