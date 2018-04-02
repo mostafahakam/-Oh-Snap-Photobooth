@@ -8,6 +8,7 @@ import numpy as np
 import os
 from werkzeug.utils import secure_filename
 import hashlib
+import time
 
 from db import *
 from auth import *
@@ -324,7 +325,8 @@ def detect_faces_in_image(file_stream, filename):
 
 
 def shorten_filename(filename):
-    last_chunk = filename.split("-")[-1]
+    ts = time.time()
+    last_chunk = filename.split("-")[-1] + ts.split(".")[0]
     return last_chunk
 
 
