@@ -249,7 +249,9 @@ def detect_faces_in_image(file_stream, filename):
             match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[i])
             if match_results[0]:
                 result.append(row.user_id)
-                addUser(result, unknown_face_encodings[i].tostring(), filename)
+                for user in result:
+                    addUser(user, unknown_face_encodings[i].tostring(), filename)
+                    
                 break
 
     if not result:
