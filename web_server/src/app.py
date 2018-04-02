@@ -88,6 +88,7 @@ def login():
     else:
         return "Missing Username"
 
+
 @app.route('/update_social/<user_id>', methods=['POST'])
 def update_social(user_id):
     headers = request.headers
@@ -97,6 +98,7 @@ def update_social(user_id):
     addUser_social(user_id, ig_handle, tw_handle, fb_handle)
 
     return "Success"
+
 
 @app.route('/get_social/<user_id>', methods=['GET'])
 def get_social(user_id):
@@ -110,6 +112,7 @@ def get_social(user_id):
 
     all_social = [fb, tw, ig]
     return json.dumps(all_social)
+
 
 @app.route('/new_face/<user_id>', methods=['POST', 'GET'])
 def new_image(user_id):
@@ -176,6 +179,30 @@ def new_image(user_id):
     return 'Image uploaded not valid'
 
 
+@app.route('/upload_photo', methods=['GET', 'POST'])
+def save_to_db():
+    # Check if a valid image file was uploaded
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return redirect(request.url)
+
+        if file and allowed_file(file.filename):
+            # The image file seems valid! Detect faces and return the result.
+            filename = secure_filename(file.filename)
+            filename = shorten_filename(filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            return add_to_db(file, filename)
+
+    # If no valid image file was uploaded, show the file upload form:
+    return 'Image uploaded not valid'
+
+
 @app.route('/detect_face', methods=['GET', 'POST'])
 def upload_image():
     # Check if a valid image file was uploaded
@@ -229,7 +256,7 @@ def clear_db(table):
     return "Cleared"
 
 
-def detect_faces_in_image(file_stream, filename):
+def add_to_db(file_stream, filename):
     # Load the uploaded image file
     img = face_recognition.load_image_file(file_stream)
     # Get face encodings for any faces in the uploaded image
@@ -251,7 +278,40 @@ def detect_faces_in_image(file_stream, filename):
                 result.append(row.user_id)
                 for user in result:
                     addUser(user, unknown_face_encodings[i].tostring(), filename)
-                    
+
+                break
+
+    if not result:
+        ret = {"face_found_in_image": face_found, "added image to database of": "Unrecognized"}
+
+    else:
+        ret = {"face_found_in_image": face_found, "added image to database of": result}
+
+    print(ret)
+    return jsonify(ret)
+
+
+def detect_faces_in_image(file_stream, filename):
+    # Load the uploaded image file
+    img = face_recognition.load_image_file(file_stream)
+    # Get face encodings for any faces in the uploaded image
+    unknown_face_encodings = face_recognition.face_encodings(img)
+
+    face_found = False
+    result = []
+
+    for i in range(0, len(unknown_face_encodings)):
+        face_found = True
+        # See if the first face in the uploaded image matches the known face of Obama
+
+        for row in Row.select():
+            curr_encoding = row.img_encoding
+            np_array = np.fromstring(curr_encoding, dtype=unknown_face_encodings[i].dtype)
+
+            match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[i])
+            if match_results[0]:
+                result.append(row.user_id)
+
                 break
 
     if not result:
