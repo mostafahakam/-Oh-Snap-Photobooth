@@ -57,9 +57,6 @@ def upload_to_Instagram(filename):
 
                     usertags.append({'position': [x, y], 'user_id': user_pk})
 
-    if user_num == 0:
-        return
-
     media = [
         {
             'type': 'photo',
