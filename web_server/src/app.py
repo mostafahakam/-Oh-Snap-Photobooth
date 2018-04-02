@@ -325,7 +325,7 @@ def detect_faces_in_image(file_stream, filename):
 
 
 def shorten_filename(filename):
-    ts = time.time()
+    ts = str(time.time())
     last_chunk = filename.split("-")[-1] + ts.split(".")[0]
     return last_chunk
 
