@@ -33,6 +33,8 @@ def upload_to_Instagram(filename):
     width, height = getImageSize(photo_path)
 
     usertags = []
+    user_num = 0
+    ig = None
 
     for i in range(0, len(face_encodings)):
         for row in Row.select():
@@ -47,11 +49,16 @@ def upload_to_Instagram(filename):
 
                 for user in Social.select().where(Social.user_id == row.user_id):
                     ig = user.instagram_handle
+                    user_num = user_num + 1
 
-                r = requests.get('https://www.instagram.com/' + ig + '/?__a=1')
-                user_pk = r.json()['graphql']['user']['id']
+                if ig:
+                    r = requests.get('https://www.instagram.com/' + ig + '/?__a=1')
+                    user_pk = r.json()['graphql']['user']['id']
 
-                usertags.append({'position': [x, y], 'user_id': user_pk})
+                    usertags.append({'position': [x, y], 'user_id': user_pk})
+
+    if user_num == 0:
+        return
 
     media = [
         {
