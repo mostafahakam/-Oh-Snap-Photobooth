@@ -21,6 +21,8 @@ app = Flask(__name__)
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+latest_file = None
+
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -198,6 +200,9 @@ def save_to_db():
             filename = shorten_filename(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+            global latest_file
+            latest_file = filename
+
             return add_to_db(file, filename)
 
     # If no valid image file was uploaded, show the file upload form:
@@ -238,9 +243,10 @@ def ret_images(user_id):
     return json.dumps(all_images)
 
 
-@app.route('/upload_to_instagram/<filename>', methods=['POST'])
-def post_to_ig(filename):
-    upload_to_Instagram(filename)
+@app.route('/upload_to_instagram', methods=['POST'])
+def post_to_ig():
+    global latest_file
+    upload_to_Instagram(latest_file)
 
     return "Success"
 
