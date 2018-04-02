@@ -283,8 +283,7 @@ def add_to_db(file_stream, filename):
             match_results = face_recognition.compare_faces([np_array], unknown_face_encodings[i])
             if match_results[0]:
                 result.append(row.user_id)
-                for user in result:
-                    addUser(user, unknown_face_encodings[i].tostring(), filename)
+                addUser(row.user_id, unknown_face_encodings[i].tostring(), filename)
 
                 break
 
