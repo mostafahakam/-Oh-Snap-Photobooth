@@ -16,7 +16,7 @@ def upload_to_Instagram(filename):
 
         if api.login():
             api.getSelfUserFeed()  # get self user feed
-            print(api.LastJson)  # print last response JSON
+#            print(api.LastJson)  # print last response JSON
             print("Login succes!")
 
         else:
