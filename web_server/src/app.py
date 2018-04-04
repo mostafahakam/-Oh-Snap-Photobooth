@@ -246,6 +246,7 @@ def ret_images(user_id):
 @app.route('/upload_to_instagram', methods=['POST'])
 def post_to_ig():
     global latest_file
+    print("Latest file: " + latest_file)
     upload_to_Instagram(latest_file)
 
     return "Success"
